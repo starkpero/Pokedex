@@ -19,7 +19,6 @@ const Pokedex = ({pokemons, page, setPage, totalPages, loading}) =>{
     return (
         <>
             <div className="header">
-                <div><p>Pokedex</p></div>
                 <Pagination page={page+1} totalPages={totalPages} onLeftClick={lastPage} onRightClick={nextPage}/>
             </div>
             {loading ? 

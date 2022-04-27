@@ -1,14 +1,17 @@
 import React, {useState, useEffect} from 'react';
+import './App.css';
 import Navbar from './components/Navbar/Navbar';
 import SearchBar from './components/Searchbar/Searchbar';
 import Pokedex from './components/Pokedex/Pokedex';
-import {getPokemonData, getPokemons} from './api/Api';
+import {getPokemonData, getPokemons, searchPokemon} from './api/Api';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [searching, setSearching] = useState(false);
 
   const fetchPokemons = async ()=>{
     try{
@@ -23,20 +26,46 @@ function App() {
        setPokemons(results);
        setLoading(false);
        setTotal(Math.ceil(data.count / 25));
+       setNotFound(false);
     }catch(err){
       console.log(err);
     }
   }
 
   useEffect(()=>{
-    fetchPokemons();
+    if(!searching){
+      fetchPokemons();
+    }
   }, [page]);
+
+  const onSearch = async (pokemon)=>{
+    if(!pokemon){
+      return fetchPokemons();
+    }
+    setLoading(true);
+    setNotFound(false);
+    setSearching(true);
+    const result = await searchPokemon(pokemon);
+    if(!result){
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }else{
+      setPokemons([result]);
+      setPage(0);
+      setTotal(1);
+    }
+   
+    setLoading(false);
+    setSearching(false);
+  }
 
 
   return (
     <div>
       <Navbar/>
-      <SearchBar/>
+      <SearchBar onSearch={onSearch}/>
+        {notFound?(<div className="not-found-text">No such pokemon found</div>):
          <Pokedex
           loading={loading}
           pokemons={pokemons}
@@ -44,6 +73,7 @@ function App() {
           setPage={setPage}
           totalPages={total}  
         />
+        }
     </div>
   );
 }
