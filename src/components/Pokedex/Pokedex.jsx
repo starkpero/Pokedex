@@ -1,11 +1,11 @@
 import React from 'react';
 import Pokemon from '../Pokemon/Pokemon';
 import Pagination from '../Pagination/Pagination';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import './Pokedex.css';
 
 
 const Pokedex = ({pokemons, page, setPage, totalPages, loading}) =>{
-    //console.log(pokemons);
     const lastPage = ()=>{
         const nextPage = Math.max(page - 1, 0);
         setPage(nextPage);
@@ -23,7 +23,7 @@ const Pokedex = ({pokemons, page, setPage, totalPages, loading}) =>{
                 <Pagination page={page+1} totalPages={totalPages} onLeftClick={lastPage} onRightClick={nextPage}/>
             </div>
             {loading ? 
-            (<div> Loading... </div>) : 
+            <LoadingSpinner/> : 
             <div className="pokedex-grid">
                 {pokemons.map((pokemon,idx)=>{
                     return (
