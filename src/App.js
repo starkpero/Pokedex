@@ -17,7 +17,7 @@ function App() {
     try{
       setLoading(true);
       const data = await getPokemons(25, 25*page);
-       console.log(data.results);
+       //console.log(data);
        const promises = data.results.map(async (pokemon) => {
          return await getPokemonData(pokemon.url);
        });
@@ -51,6 +51,7 @@ function App() {
       setLoading(false);
       return;
     }else{
+      //console.log(result);
       setPokemons([result]);
       setPage(0);
       setTotal(1);

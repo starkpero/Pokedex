@@ -6,6 +6,7 @@ import './Pokedex.css';
 
 
 const Pokedex = ({pokemons, page, setPage, totalPages, loading}) =>{
+
     const lastPage = ()=>{
         const nextPage = Math.max(page - 1, 0);
         setPage(nextPage);
@@ -19,12 +20,13 @@ const Pokedex = ({pokemons, page, setPage, totalPages, loading}) =>{
     return (
         <>
             <div className="header">
+                <div><h1>Pokedex</h1></div>
                 <Pagination page={page+1} totalPages={totalPages} onLeftClick={lastPage} onRightClick={nextPage}/>
             </div>
             {loading ? 
             <LoadingSpinner/> : 
             <div className="pokedex-grid">
-                {pokemons.map((pokemon,idx)=>{
+                {pokemons.map((pokemon)=>{
                     return (
                         <Pokemon pokemon={pokemon} key={pokemon.name}/>
                     )
